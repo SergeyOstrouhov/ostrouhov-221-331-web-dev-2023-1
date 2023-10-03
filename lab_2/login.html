@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_log.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="auth">
+        <form method="post" action="https://httpbin.org/post" enctype="multipart/form-data">
+        <div class="inp">
+            <label for="login">Введите логин или почту</label>
+            <input type="text" id="login" name="login" required placeholder="login" value="sdfasf">
+        </div>
+        <div class="inp">
+            <label for="password">Введите пароль</label>
+            <input type="text" id="password" name="password" required placeholder="password">
+        </div>
+        <div class="inp">
+            <input type="checkbox" id="remember" name="rem">
+            <label for="remember">Запомнить меня</label>
+        </div>
+        <div>
+            <button type="submit" class="inp1">Войти</button>
+        </div>
+        </form>
+    </div>
+</body>
+
+</html>
