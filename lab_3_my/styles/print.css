@@ -1,0 +1,56 @@
+@media print {
+    body {
+        display: block;
+    }
+
+    footer,
+    nav {
+        display: none;
+    }
+
+    /* header p, header h1 {
+        display: inline;
+        text-align: center;
+    } */
+    /* .header-div {
+        text-align: center;
+    } */
+
+    .history,
+    .traditionals,
+    .info,
+    .about,
+    .contacts {
+
+        border: none;
+        margin: 0;
+        padding: 0;
+
+    }
+
+    main {
+
+        display: block;
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .trad {
+        flex-direction: column; 
+        /* display: block;  */
+        width: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    
+
+    .trad li {
+        border: none;
+        margin: 5px;
+        padding: 0;
+        width: 19cm;
+
+    }
+}
