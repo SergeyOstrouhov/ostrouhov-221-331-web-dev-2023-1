@@ -221,6 +221,7 @@ function newChar(event) {
 function clearSpan(event) {
     let targ = event.target;
     mainSpan.textContent = '';
+    outputResult.textContent = '';
 }
 
 function start(event) {

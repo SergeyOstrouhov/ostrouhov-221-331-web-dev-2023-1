@@ -1,0 +1,77 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main {
+    width: 500px;
+    
+}
+
+.calc-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    justify-items: stretch;
+    border: 3px solid grey;
+    border-radius: 20px;
+    overflow: hidden;
+
+}
+.screen {
+    min-height: 81px;
+    padding: 2px;
+    max-width: 495px; /* Максимальная ширина элемента */
+    word-wrap: break-word;
+    background-color: red;
+    color: white;
+    /* font-family: 'Fira Sans', sans-serif; */
+
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    font-size: 50px;
+    display: block;
+}
+.buttons {
+    display: flex;
+    min-height: 484px;
+    align-items: stretch;
+    /* padding: 5px; */
+    border-collapse: collapse;
+    
+}
+.digits {
+    width: 60%;
+    border: 1px solid grey;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+   justify-content: space-around;
+   
+
+}
+.other {
+    width: 40%;
+    border: 1px solid grey;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+   justify-content: space-around;
+   
+    
+
+}
+.key {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    font-size: 40px;
+    font-family: 'Kdam Thmor Pro', sans-serif;
+}
+/* .digit {
+    
+    border-radius: 50%;
+}
+.operation, .bracket, .result, .clear {
+    
+    border-radius: 50%;
+} */
