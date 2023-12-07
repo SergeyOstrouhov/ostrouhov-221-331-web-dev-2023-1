@@ -246,3 +246,4 @@ resultBut.addEventListener('click', start);
 window.onload = function () {
     // your code here
 };
+//DomContentLoaded  

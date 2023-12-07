@@ -1,3 +1,6 @@
+const autocompleteList = document.getElementById('autocompleteList');
+
+let page = 1;
 function createAuthorElement(record) {
     let user = record.user || { 'name': { 'first': '', 'last': '' } };
     let authorElement = document.createElement('div');
@@ -94,83 +97,51 @@ function renderPaginationElement(info) {
     paginationContainer.append(btn);
 }
 
-function downloadData(page = 1, query) {
+function downloadData(page = 1) {
     let factsList = document.querySelector('.facts-list');
     let url = new URL(factsList.dataset.url);
     let perPage = document.querySelector('.per-page-btn').value;
     url.searchParams.append('page', page);
     url.searchParams.append('per-page', perPage);
-    if (query != undefined) {
-        url.searchParams.append('q', query);
-    }
+    let searchText = document.querySelector('.search-field').value;
+    if (searchText !== "") url.searchParams.append('q', searchText);
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
-    //xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
     xhr.responseType = 'json';
     xhr.onload = function () {
         renderRecords(this.response.records);
         setPaginationInfo(this.response['_pagination']);
         renderPaginationElement(this.response['_pagination']);
     };
-    console.log(url);
     xhr.send();
 }
 
 function perPageBtnHandler(event) {
-    downloadData(1, currQuery);
+    downloadData(1);
+    autocompleteList.innerHTML = '';
 }
 
 function pageBtnHandler(event) {
     if (event.target.dataset.page) {
-        downloadData(event.target.dataset.page, currQuery);
+        downloadData(event.target.dataset.page);
         window.scrollTo(0, 0);
     }
 }
-
-
-
-function searchRec() {
-    currQueryfunc = currQuery.value; 
-    console.log(currQueryfunc)
-    downloadData(1, currQueryfunc);
+function showAutocompletion() {
+    let searchText = document.querySelector('.search-field').value;
+    url.searchParams.append('q', searchText);
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 
+        "http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete");
+    xhr.responseType = 'json';
+    xhr.onload = function () {
+        ;
+    };
+    xhr.send();
 }
-
-
-window.onload = function () {
-    downloadData(undefined, currQuery);
-    // /
-    // вот это я менял 
-
-
-    document.querySelector('.pagination').onclick = pageBtnHandler;
-    document.querySelector('.per-page-btn').onchange = perPageBtnHandler;
-    
-};
-
-let searchBtn = document.getElementsByClassName('search-btn')[0];
-searchBtn.addEventListener('click', searchRec);
-let currQuery = document.getElementsByClassName("search-field")[0]
-
-
 const searchInput = document.getElementById('searchInput');
-const autocompleteList = document.getElementById('autocompleteList');
 
-// Функция для выполнения запроса к API и обработки результата
-async function fetchAutocompleteResults(query) {
-    const url = `http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete?q=${query}`;
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        // Обработка полученных данных и отображение вариантов автодополнения
-        displayAutocompleteOptions(data);
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса к API:', error);
-    }
-}
-
-// Функция для отображения вариантов автодополнения
 function displayAutocompleteOptions(options) {
     // Очищаем предыдущие варианты
     autocompleteList.innerHTML = '';
@@ -188,6 +159,34 @@ function displayAutocompleteOptions(options) {
     });
 }
 
+// Функция для выполнения запроса к API и обработки результата
+async function fetchAutocompleteResults(query) {
+    const apiUrl = `http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete?q=${query}`;
+    let xhr = new XMLHttpRequest();
+       
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+    
+                // Обработка полученных данных
+                // и отображение вариантов автодополнения
+                displayAutocompleteOptions(data);
+            } else {
+                console.error('Ошибка при выполнении запроса к API:',
+                    xhr.statusText);
+            }
+        }
+    };
+    
+    xhr.open('GET', apiUrl);
+    xhr.send();
+}
+
+
+// Функция для отображения вариантов автодополнения
+
+
 // Обработчик события для поля ввода
 searchInput.addEventListener('input', function () {
     const searchQuery = this.value;
@@ -195,3 +194,13 @@ searchInput.addEventListener('input', function () {
     // Выполняем запрос к API при изменении значения в поле ввода
     fetchAutocompleteResults(searchQuery);
 });
+
+
+window.onload = function () {
+    downloadData();
+    
+    document.querySelector('.pagination').onclick = pageBtnHandler;
+    document.querySelector('.per-page-btn').onchange = perPageBtnHandler;
+    document.querySelector('.search-btn').onclick = perPageBtnHandler;
+    document.querySelector('.search-field').oninput = showAutocompletion;
+};
