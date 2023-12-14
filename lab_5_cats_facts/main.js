@@ -160,7 +160,7 @@ function displayAutocompleteOptions(options) {
 }
 
 // Функция для выполнения запроса к API и обработки результата
-async function fetchAutocompleteResults(query) {
+function AutocompleteResults(query) {
     const apiUrl = `http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete?q=${query}`;
     let xhr = new XMLHttpRequest();
        
@@ -192,7 +192,7 @@ searchInput.addEventListener('input', function () {
     const searchQuery = this.value;
 
     // Выполняем запрос к API при изменении значения в поле ввода
-    fetchAutocompleteResults(searchQuery);
+    AutocompleteResults(searchQuery);
 });
 
 

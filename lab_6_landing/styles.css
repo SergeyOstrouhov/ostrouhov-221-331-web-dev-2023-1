@@ -1,0 +1,12 @@
+main {
+    flex: 1;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.backimg {
+    background-image: url("/images/run.jpeg");
+    background-size: cover;
+}
