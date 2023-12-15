@@ -161,7 +161,8 @@ function displayAutocompleteOptions(options) {
 
 // Функция для выполнения запроса к API и обработки результата
 function AutocompleteResults(query) {
-    const apiUrl = `http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete?q=${query}`;
+    let apiUrl = new URL('http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete');
+    apiUrl.searchParams.append('q', query);
     let xhr = new XMLHttpRequest();
        
     xhr.onreadystatechange = function () {
@@ -182,9 +183,6 @@ function AutocompleteResults(query) {
     xhr.open('GET', apiUrl);
     xhr.send();
 }
-
-
-// Функция для отображения вариантов автодополнения
 
 
 // Обработчик события для поля ввода
