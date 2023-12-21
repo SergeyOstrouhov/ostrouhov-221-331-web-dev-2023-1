@@ -1,9 +1,56 @@
 'use strict';
 
+let titles = {
+    'create': 'Создание новой задачи',
+    'edit': 'Редактирование задачи',
+    'show': 'Просмотр задачи'
+};
+
+let actionBtnText = {
+    'create': 'Создать',
+    'edit': 'Сохранить',
+    'show': 'Ок'
+};
+
+async function moveTask(id, list) {
+    //console.info(list)
+    let cur_url = new URL(`http://tasks-api.std-900.ist.mospolytech.ru/api/tasks/${id}?api_key=50d2199a-42dc-447d-81ed-d68a443b697e`);
+    let taskData = new FormData();
+    taskData.append("status", list);
+    let send = await fetch(cur_url, {
+        method: "PUT",
+        body: taskData
+    });
+    
+}
+
+function moveBtnHandler(event) {
+    let taskElement = event.target.closest('.task');
+    let currentListElement = taskElement.closest('ul');
+    let targetListElement = document.getElementById(currentListElement.id == 'to-do-list' ? 'done-list' : 'to-do-list');
+
+    let tasksCounterElement = taskElement.closest('.card').querySelector('.tasks-counter');
+    tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) - 1;
+
+    let cur_list = "";
+    if (currentListElement.id == 'to-do-list') {
+        cur_list = "done";
+    } else {
+        cur_list = "to-do";
+    }
+
+    moveTask(taskElement.id, cur_list);
+    
+    targetListElement.append(taskElement);
+
+    tasksCounterElement = targetListElement.closest('.card').querySelector('.tasks-counter');
+    tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) + 1;
+}
+
 let url = new URL('http://tasks-api.std-900.ist.mospolytech.ru/api/tasks?api_key=50d2199a-42dc-447d-81ed-d68a443b697e');
 let taskCounter = 0;
 
-function showAlert(msg, category='success') {
+function showAlert(msg, category = 'success') {
     let alertsContainer = document.querySelector('.alerts');
     let newAlertElement = document.getElementById('alerts-template').cloneNode(true);
     newAlertElement.querySelector('.msg').innerHTML = msg;
@@ -73,6 +120,35 @@ async function updateTask(form, id) {
     });
 }
 
+async function deletetask(id) {
+    let cur_url = new URL(`http://tasks-api.std-900.ist.mospolytech.ru/api/tasks/${id}?api_key=50d2199a-42dc-447d-81ed-d68a443b697e`);
+    let send = await fetch(cur_url, {
+        method: "DELETE",
+    });
+    
+}
+
+
+function removeTaskBtnHandler(event) {
+    console.error("1234");
+    let form = event.target.closest('.modal').querySelector('form');
+    let taskElement = document.getElementById(form.elements['task-id'].value);
+
+    let tasksCounterElement = taskElement.closest('.card').querySelector('.tasks-counter');
+    tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) - 1;
+    deletetask(form.elements['task-id'].value);
+    taskElement.remove();
+}
+
+async function updateTaskCount() {
+    const toDoCount = document.getElementById('to-do-list').childElementCount;
+    const doneCount = document.getElementById('done-list').childElementCount;
+    const ergegerg = document.querySelectorAll('.tasks-counter')[0];
+    ergegerg.innerText = toDoCount - 1;
+    const ergegerg2 = document.querySelectorAll('.tasks-counter')[1];
+    ergegerg2.innerText = doneCount;   
+}
+
 
 function actionTaskBtnHandler(event) {
     let form, listElement, tasksCounterElement, alertMsg, action;
@@ -134,16 +210,6 @@ function prepareModalContent(event) {
 
 }
 
-function removeTaskBtnHandler(event) {
-    let form = event.target.closest('.modal').querySelector('form');
-    let taskElement = document.getElementById(form.elements['task-id'].value);
-
-    let tasksCounterElement = taskElement.closest('.card').querySelector('.tasks-counter');
-    tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) - 1;
-
-    taskElement.remove();
-}
-
 function moveBtnHandler(event) {
     let taskElement = event.target.closest('.task');
     let currentListElement = taskElement.closest('ul');
@@ -152,25 +218,21 @@ function moveBtnHandler(event) {
     let tasksCounterElement = taskElement.closest('.card').querySelector('.tasks-counter');
     tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) - 1;
 
+    let cur_list = "";
+    if (currentListElement.id == 'to-do-list') {
+        cur_list = "done";
+    } else {
+        cur_list = "to-do";
+    }
+
+    moveTask(taskElement.id, cur_list);
+    
     targetListElement.append(taskElement);
 
     tasksCounterElement = targetListElement.closest('.card').querySelector('.tasks-counter');
     tasksCounterElement.innerHTML = Number(tasksCounterElement.innerHTML) + 1;
 }
 
-
-
-let titles = {
-    'create': 'Создание новой задачи',
-    'edit': 'Редактирование задачи',
-    'show': 'Просмотр задачи'
-};
-
-let actionBtnText = {
-    'create': 'Создать',
-    'edit': 'Сохранить',
-    'show': 'Ок'
-};
 
 async function getListOfTasks () {
     // eslint-disable-next-line max-len
@@ -180,7 +242,10 @@ async function getListOfTasks () {
     tasks.forEach(task => {
         //console.log(task);
         addTaskToPage(task);
+    
+    
     });
+    updateTaskCount();
 }
 
 window.onload = function () {

@@ -1,5 +1,6 @@
 const autocompleteList = document.getElementById('autocompleteList');
 
+
 let page = 1;
 function createAuthorElement(record) {
     let user = record.user || { 'name': { 'first': '', 'last': '' } };
@@ -161,7 +162,7 @@ function displayAutocompleteOptions(options) {
 
 // Функция для выполнения запроса к API и обработки результата
 function AutocompleteResults(query) {
-    let apiUrl = new URL('http://cat-facts-api.std-900.ist.mospolytech.ru/autocomplete');
+    
     apiUrl.searchParams.append('q', query);
     let xhr = new XMLHttpRequest();
        
